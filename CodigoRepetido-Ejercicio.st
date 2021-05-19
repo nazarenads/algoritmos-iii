@@ -21,156 +21,152 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 14:48:49'!
-action: action runningMillisecondsThreshold: time
-	|millisecondsBeforeRunning millisecondsAfterRunning |	
-	
-	millisecondsBeforeRunning := Time millisecondClockValue * millisecond.
-	action.
-	millisecondsAfterRunning := Time millisecondClockValue * millisecond.
-	
-	self assert: (millisecondsAfterRunning-millisecondsBeforeRunning) < (time * millisecond)! !
-
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:00:20'!
-addCustomer: name
-	| customerBook |
-			
-	customerBook := CustomerBook new.
-	customerBook addCustomerNamed: name.
-	^customerBook.! !
-
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:43:25'!
-canNotSuspend: name customerBook: customerBook includedName: includedName
-
-	[ customerBook suspendCustomerNamed: name.
-	self fail ]
-		on: CantSuspend 
-		do: [ :anError | 
-			self assert: customerBook numberOfCustomers = 1.
-			self assert: (customerBook includesCustomerNamed: includedName) ]
-! !
-
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:34:40'!
-customerBook: customerBook expectedActiveCustomers: 	activeCustomers expectedSuspendedCustomers: suspendedCustomers numberOfCustomers: customers 
-
-	self assert: activeCustomers equals: customerBook numberOfActiveCustomers.
-	self assert: suspendedCustomers equals: customerBook numberOfSuspendedCustomers.
-	self assert: customers equals: customerBook numberOfCustomers.
- ! !
-
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 14:53:26'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:40:37'!
 test01AddingCustomerShouldNotTakeMoreThan50Milliseconds
 
-	| customerBook customerName runningThreshold|
+	| customerBook johnLennon expectedTime|
 	
 	customerBook := CustomerBook new.
-	customerName := 'John Lennon'.
-	runningThreshold := 50.
+	johnLennon := 'John Lennon'.
+	expectedTime := 50 milliSeconds.
+		
+	self should: [customerBook addCustomerNamed: johnLennon] notTakeMoreThan: expectedTime.
 	
-	self action:  [:name | customerBook addCustomerNamed: customerName] runningMillisecondsThreshold: runningThreshold
+	
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:01:35'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:41:40'!
 test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 
-	| customerBook paulMcCartney runningThreshold|
+	| customerBook paulMcCartney expectedTime|
 	
 	paulMcCartney := 'Paul McCartney'.
-	customerBook := self addCustomer: paulMcCartney.
-	runningThreshold := 100.
-	  
-	self action:  [:name | customerBook addCustomerNamed: paulMcCartney] runningMillisecondsThreshold: runningThreshold 
+	customerBook := self createCustomerBookWithCustomer: paulMcCartney.
+	expectedTime := 100 milliSeconds.
+	
+	self should: [customerBook removeCustomerNamed: paulMcCartney] notTakeMoreThan: expectedTime.
+
+
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'HernanWilkinson 5/9/2012 18:12'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:30:24'!
 test03CanNotAddACustomerWithEmptyName 
 
 	| customerBook |
 			
 	customerBook := CustomerBook new.
-
-	[ customerBook addCustomerNamed: ''.
-	self fail ]
-		on: Error 
-		do: [ :anError | 
-			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
-			self assert: customerBook isEmpty ]! !
-
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:02:25'!
-test04CanNotRemoveAnInvalidCustomer
 	
-	| customerBook johnLennon |
-			
-	johnLennon := 'John Lennon'.
-	customerBook := self addCustomer: johnLennon.
+	self should: [ customerBook addCustomerNamed: ''.]  
+		raise: Error
+		withMessageText:  CustomerBook customerCanNotBeEmptyErrorMessage.
+		
+	self assert: customerBook isEmpty.	
+
 	
-	[ customerBook removeCustomerNamed: 'Paul McCartney'.
-	self fail ]
-		on: NotFound 
-		do: [ :anError | 
-			self assert: customerBook numberOfCustomers = 1.
-			self assert: (customerBook includesCustomerNamed: johnLennon) ]
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:35:54'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:44:18'!
+test04CanNotRemoveAnInvalidCustomer
+	
+	| customerBook johnLennon paulMcCartney|
+			
+	johnLennon := 'John Lennon'.
+	customerBook := self createCustomerBookWithCustomer: johnLennon.
+	paulMcCartney := 'Paul McCartney'.
+		
+	self should: [ customerBook removeCustomerNamed: paulMcCartney ] 
+	raise: NotFound 
+	withExceptionDo: [ :anError | 		
+		self assert: customerBook numberOfCustomers = 1.
+		self assert: (customerBook includesCustomerNamed: johnLennon)]! !
+
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:45:06'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
 	
 	paulMcCartney := 'Paul McCartney'.
-	customerBook := self addCustomer: paulMcCartney.
+	customerBook := self createCustomerBookWithCustomer: paulMcCartney.
 	
 	customerBook suspendCustomerNamed: paulMcCartney.
 	
-	self customerBook: customerBook expectedActiveCustomers: 	0 expectedSuspendedCustomers: 1 numberOfCustomers: 1.
+	self assertThatCustomerBook: customerBook numberOfActiveCustomersIs: 	0 numberOfSuspendedCustomersIs: 1 andTotalNumberOfCustomersIs: 1. 
 	self assert: (customerBook includesCustomerNamed: paulMcCartney).
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:36:46'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 20:31:00'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
 	
 	paulMcCartney := 'Paul McCartney'.
-	customerBook := self addCustomer: paulMcCartney.
+	customerBook := self createCustomerBookWithCustomer: paulMcCartney.
 
 	customerBook suspendCustomerNamed: paulMcCartney.
 	customerBook removeCustomerNamed: paulMcCartney.
 		
-	self customerBook: customerBook expectedActiveCustomers: 	0 expectedSuspendedCustomers: 0 numberOfCustomers: 0.
+	self assertThatCustomerBook: customerBook numberOfActiveCustomersIs: 	0 numberOfSuspendedCustomersIs: 0 andTotalNumberOfCustomersIs: 0. 
 	self deny: (customerBook includesCustomerNamed: paulMcCartney).
 
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:43:49'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:52:51'!
 test07CanNotSuspendAnInvalidCustomer
 	
 	| customerBook johnLennon ringoStarr|
 			
 	johnLennon := 'John Lennon'.
-	customerBook := self addCustomer: johnLennon.
+	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	ringoStarr := 'Ringo Starr'.
+	
+	self should: [ customerBook suspendCustomerNamed: ringoStarr] 
+		raise: CantSuspend 
+		withExceptionDo: [ :anError | 		
+			self assert: customerBook numberOfCustomers = 1. 
+			self deny: (customerBook includesCustomerNamed: ringoStarr )]
 
-	self canNotSuspend: ringoStarr customerBook: customerBook includedName: johnLennon.! !
+		
+	! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/16/2021 15:44:12'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:16:39'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook johnLennon |
 			
 	johnLennon := 'John Lennon'.
-	customerBook := self addCustomer: johnLennon.
+	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	customerBook suspendCustomerNamed: johnLennon.
-	
-	self canNotSuspend: johnLennon customerBook: customerBook includedName: johnLennon.
+		
+	self should: [ customerBook suspendCustomerNamed: johnLennon] 
+	raise: CantSuspend 
+	withExceptionDo: [ :anError | 		
+		self assert: customerBook numberOfCustomers = 1. 
+		self assert: (customerBook includesCustomerNamed: johnLennon )]
 ! !
+
+
+!CustomerBookTest methodsFor: 'helpers' stamp: 'NDS 5/18/2021 20:26:27'!
+assertThatCustomerBook: customerBook numberOfActiveCustomersIs: 	activeCustomers numberOfSuspendedCustomersIs: suspendedCustomers andTotalNumberOfCustomersIs: customers 
+
+	self assert: activeCustomers equals: customerBook numberOfActiveCustomers.
+	self assert: suspendedCustomers equals: customerBook numberOfSuspendedCustomers.
+	self assert: customers equals: customerBook numberOfCustomers.
+ ! !
+
+!CustomerBookTest methodsFor: 'helpers' stamp: 'NDS 5/18/2021 20:29:23'!
+createCustomerBookWithCustomer: customer
+	| customerBook |
+			
+	customerBook := CustomerBook new.
+	customerBook addCustomerNamed: customer.
+	^customerBook.! !
 
 
 !classDefinition: #CustomerBook category: 'CodigoRepetido-Ejercicio'!
