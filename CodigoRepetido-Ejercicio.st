@@ -117,7 +117,7 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 12:54:48'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 14:38:05'!
 test07CanNotSuspendAnInvalidCustomer
 	
 	| customerBook johnLennon ringoStarr |
@@ -126,7 +126,7 @@ test07CanNotSuspendAnInvalidCustomer
 	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	ringoStarr := 'Ringo Starr'.
 	
-	self suspendCustomerAndCheckBlock: 
+	self suspendCustomerAndCheck: 
 	[ :anError | 		
 			self assert: customerBook numberOfCustomers = 1. 
 			self deny: (customerBook includesCustomerNamed: ringoStarr )
@@ -135,7 +135,7 @@ test07CanNotSuspendAnInvalidCustomer
 		
 	! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 12:54:35'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 14:38:11'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook johnLennon |
@@ -144,8 +144,7 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	customerBook suspendCustomerNamed: johnLennon.
 	
-	
-	self suspendCustomerAndCheckBlock: 
+	self suspendCustomerAndCheck: 
 	[ :anError | 		
 		self assert: customerBook numberOfCustomers = 1. 
 		self assert: (customerBook includesCustomerNamed: johnLennon )
@@ -170,8 +169,8 @@ createCustomerBookWithCustomer: customer
 	customerBook addCustomerNamed: customer.
 	^customerBook.! !
 
-!CustomerBookTest methodsFor: 'helpers' stamp: 'fmonpelat 5/20/2021 12:52:05'!
-suspendCustomerAndCheckBlock: aBlock customerBook: customerBook customerName: aCustomerName
+!CustomerBookTest methodsFor: 'helpers' stamp: 'fmonpelat 5/20/2021 14:37:46'!
+suspendCustomerAndCheck: aBlock customerBook: customerBook customerName: aCustomerName
 	self should: [ customerBook suspendCustomerNamed: aCustomerName] 
 	raise: CantSuspend 
 	withExceptionDo: aBlock! !
