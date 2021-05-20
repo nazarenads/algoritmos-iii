@@ -52,14 +52,14 @@ test02RemovingCustomerShouldNotTakeMoreThan100Milliseconds
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:30:24'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 13:05:50'!
 test03CanNotAddACustomerWithEmptyName 
 
 	| customerBook |
 			
 	customerBook := CustomerBook new.
 	
-	self should: [ customerBook addCustomerNamed: ''.]  
+	self should: [ customerBook addCustomerNamed: ''.]
 		raise: Error
 		withMessageText:  CustomerBook customerCanNotBeEmptyErrorMessage.
 		
@@ -99,7 +99,7 @@ test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 20:31:00'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 12:55:15'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -117,25 +117,25 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:52:51'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 12:54:48'!
 test07CanNotSuspendAnInvalidCustomer
 	
-	| customerBook johnLennon ringoStarr|
+	| customerBook johnLennon ringoStarr |
 			
 	johnLennon := 'John Lennon'.
 	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	ringoStarr := 'Ringo Starr'.
 	
-	self should: [ customerBook suspendCustomerNamed: ringoStarr] 
-		raise: CantSuspend 
-		withExceptionDo: [ :anError | 		
+	self suspendCustomerAndCheckBlock: 
+	[ :anError | 		
 			self assert: customerBook numberOfCustomers = 1. 
-			self deny: (customerBook includesCustomerNamed: ringoStarr )]
-
+			self deny: (customerBook includesCustomerNamed: ringoStarr )
+	]
+	customerBook: customerBook customerName: ringoStarr.
 		
 	! !
 
-!CustomerBookTest methodsFor: 'tests' stamp: 'NDS 5/18/2021 23:16:39'!
+!CustomerBookTest methodsFor: 'tests' stamp: 'fmonpelat 5/20/2021 12:54:35'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook johnLennon |
@@ -143,12 +143,14 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	johnLennon := 'John Lennon'.
 	customerBook := self createCustomerBookWithCustomer: johnLennon.
 	customerBook suspendCustomerNamed: johnLennon.
-		
-	self should: [ customerBook suspendCustomerNamed: johnLennon] 
-	raise: CantSuspend 
-	withExceptionDo: [ :anError | 		
+	
+	
+	self suspendCustomerAndCheckBlock: 
+	[ :anError | 		
 		self assert: customerBook numberOfCustomers = 1. 
-		self assert: (customerBook includesCustomerNamed: johnLennon )]
+		self assert: (customerBook includesCustomerNamed: johnLennon )
+	]
+	customerBook: customerBook customerName: johnLennon.
 ! !
 
 
@@ -167,6 +169,12 @@ createCustomerBookWithCustomer: customer
 	customerBook := CustomerBook new.
 	customerBook addCustomerNamed: customer.
 	^customerBook.! !
+
+!CustomerBookTest methodsFor: 'helpers' stamp: 'fmonpelat 5/20/2021 12:52:05'!
+suspendCustomerAndCheckBlock: aBlock customerBook: customerBook customerName: aCustomerName
+	self should: [ customerBook suspendCustomerNamed: aCustomerName] 
+	raise: CantSuspend 
+	withExceptionDo: aBlock! !
 
 
 !classDefinition: #CustomerBook category: 'CodigoRepetido-Ejercicio'!
