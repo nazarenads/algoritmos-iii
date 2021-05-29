@@ -364,13 +364,10 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:02:43'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:45:10'!
 * aMultiplier 
 	
-	(aMultiplier isKindOf: Entero) 
-		ifTrue: [^self class with: value * aMultiplier integerValue].
-	(aMultiplier isKindOf: Fraccion) 
-		ifTrue: [^ (self * aMultiplier numerator) / aMultiplier denominator]. 
+	^aMultiplier beMultipliedWithEntero: self
 
 	
 	! !
@@ -410,10 +407,15 @@ beAddedToFraccion: aFraccionAugend
 
 	^(self * aFraccionAugend denominator + aFraccionAugend numerator) / aFraccionAugend denominator! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:35:17'!
-beMultipliedTo: anEnteroMultiplicand
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:43:10'!
+beMultipliedWithEntero: anEnteroMultiplicand
 
-	^anEnteroMultiplicand * self integerValue! !
+	^self class with: anEnteroMultiplicand integerValue * self integerValue! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:47:19'!
+beMultipliedWithFraccion: aFraccionMultiplicand
+
+	^ (self * aFraccionMultiplicand numerator) / aFraccionMultiplicand denominator.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -513,15 +515,10 @@ Numero subclass: #Fraccion
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:48:25'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:48:13'!
 * aMultiplier 
 
-	(aMultiplier isKindOf: Fraccion) 
-		ifTrue: [^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)]. 
-	
-	(aMultiplier isKindOf: Entero) 
-		ifTrue: [^ (aMultiplier * self numerator) / self denominator].
-	
+	^aMultiplier beMultipliedWithFraccion: self	
 	! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:32:45'!
@@ -570,6 +567,16 @@ beAddedToFraccion: aFraccionAugend
 	newDenominator := aFraccionAugend denominator * self denominator.
 
 	^newNumerator / newDenominator ! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:44:38'!
+beMultipliedWithEntero: anEnteroMultiplicand
+
+	^ (anEnteroMultiplicand * self numerator) / self denominator! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:46:28'!
+beMultipliedWithFraccion: aFraccionMultiplicand
+
+	^(aFraccionMultiplicand numerator * self numerator) / (aFraccionMultiplicand denominator * self denominator)! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
