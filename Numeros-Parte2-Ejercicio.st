@@ -383,15 +383,9 @@ Numero subclass: #Entero
 	^aSubtrahend beSubstractedFromEntero: self
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:01:49'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:33:47'!
 / aDivisor 
-
-	(aDivisor isKindOf: Entero) 
-		ifTrue: [^Fraccion with: self over: aDivisor].
-	(aDivisor isKindOf: Fraccion) 
-		ifTrue:  [^(self * aDivisor denominator) / aDivisor numerator].
-	
-! !
+       ^ aDivisor divideEntero: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:26:39'!
 beAddedToEntero: anEnteroAugend
@@ -422,6 +416,14 @@ beSubstractedFromEntero: anEnteroMinuend
 beSubstractedFromFraccion: aFraccionMinuend
 
 	^ aFraccionMinuend numerator - (self * aFraccionMinuend denominator)  / aFraccionMinuend denominator ! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:33:47'!
+divideEntero: aDividend
+	^Fraccion with: aDividend over: self! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:35:14'!
+divideFraccion: aDividend
+	^aDividend numerator / (self * aDividend denominator)! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -542,13 +544,9 @@ Numero subclass: #Fraccion
 	^ aSubtrahend beSubstractedFromFraccion: self
 ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:04:48'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:35:14'!
 / aDivisor 
-	
-	(aDivisor isKindOf: Fraccion) 
-		ifTrue: [^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)]. 
-	(aDivisor isKindOf: Entero) 
-		ifTrue: [^self numerator / (aDivisor * self denominator)].! !
+	^aDivisor divideFraccion: self.! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:26:39'!
 beAddedToEntero: anEnteroAugend
@@ -589,6 +587,14 @@ beSubstractedFromFraccion: aFraccionMinuend
 	newDenominator := aFraccionMinuend denominator * self denominator.
 
 	^newNumerator / newDenominator ! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:33:47'!
+divideEntero: aDividend
+	^(aDividend * self denominator) / self numerator! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'fmonpelat 5/29/2021 15:35:14'!
+divideFraccion: aDividend
+	^(aDividend numerator * self denominator) / (aDividend denominator * self numerator)! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
