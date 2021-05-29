@@ -364,7 +364,7 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:45:47'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:02:43'!
 * aMultiplier 
 	
 	(aMultiplier isKindOf: Entero) 
@@ -375,14 +375,10 @@ Numero subclass: #Entero
 	
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:11:00'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:27:04'!
 + anAdder 
 	
-	(anAdder isKindOf: Entero) 
-		ifTrue: [^self class with: value + anAdder integerValue].
-	(anAdder isKindOf: Fraccion) 
-		ifTrue: [^ (self * anAdder denominator + anAdder numerator) / anAdder denominator ]. 
-! !
+	^anAdder beAddedToEntero: self.! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:30:30'!
 - aSubtrahend 
@@ -403,6 +399,21 @@ Numero subclass: #Entero
 		ifTrue:  [^(self * aDivisor denominator) / aDivisor numerator].
 	
 ! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:26:39'!
+beAddedToEntero: anEnteroAugend
+	
+	^ self class with: anEnteroAugend integerValue + self integerValue! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:32:21'!
+beAddedToFraccion: aFraccionAugend
+
+	^(self * aFraccionAugend denominator + aFraccionAugend numerator) / aFraccionAugend denominator! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:35:17'!
+beMultipliedTo: anEnteroMultiplicand
+
+	^anEnteroMultiplicand * self integerValue! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -513,19 +524,10 @@ Numero subclass: #Fraccion
 	
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:16:38'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:32:45'!
 + anAdder 
 	
-	(anAdder isKindOf: Fraccion) 
-		ifTrue: [
-			| newNumerator newDenominator |
-	
-			newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
-			newDenominator := denominator * anAdder denominator.
-	
-			^newNumerator / newDenominator ].
-	(anAdder isKindOf: Entero) 
-		ifTrue: [^ (anAdder * self denominator + self numerator) / self denominator ]. 
+	^anAdder beAddedToFraccion: self
 
 	
 	
@@ -553,6 +555,21 @@ Numero subclass: #Fraccion
 		ifTrue: [^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)]. 
 	(aDivisor isKindOf: Entero) 
 		ifTrue: [^self numerator / (aDivisor * self denominator)].! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:26:39'!
+beAddedToEntero: anEnteroAugend
+
+	^(anEnteroAugend * self denominator + self numerator) / self denominator.! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:31:08'!
+beAddedToFraccion: aFraccionAugend
+
+	| newNumerator newDenominator |
+	
+	newNumerator := (aFraccionAugend numerator * self denominator) + (aFraccionAugend denominator * self numerator).
+	newDenominator := aFraccionAugend denominator * self denominator.
+
+	^newNumerator / newDenominator ! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
