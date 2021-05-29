@@ -377,14 +377,10 @@ Numero subclass: #Entero
 	
 	^anAdder beAddedToEntero: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:30:30'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 15:04:36'!
 - aSubtrahend 
 	
-	(aSubtrahend isKindOf: Entero) 
-		ifTrue: [^ self class with: value - aSubtrahend integerValue ].
-	
-	(aSubtrahend isKindOf: Fraccion) 
-		ifTrue: [^ (self * aSubtrahend denominator - aSubtrahend numerator) / aSubtrahend denominator ].
+	^aSubtrahend beSubstractedFromEntero: self
 	! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:01:49'!
@@ -416,6 +412,16 @@ beMultipliedWithEntero: anEnteroMultiplicand
 beMultipliedWithFraccion: aFraccionMultiplicand
 
 	^ (self * aFraccionMultiplicand numerator) / aFraccionMultiplicand denominator.! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:53:21'!
+beSubstractedFromEntero: anEnteroMinuend
+
+	^ anEnteroMinuend class with: anEnteroMinuend integerValue - self integerValue ! !
+
+!Entero methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 15:04:18'!
+beSubstractedFromFraccion: aFraccionMinuend
+
+	^ aFraccionMinuend numerator - (self * aFraccionMinuend denominator)  / aFraccionMinuend denominator ! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -530,19 +536,10 @@ Numero subclass: #Fraccion
 	
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 12:42:49'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 15:04:51'!
 - aSubtrahend 
 	
-	(aSubtrahend isKindOf: Fraccion) 
-		ifTrue: [
-			| newNumerator newDenominator |
-	
-			newNumerator := (numerator * aSubtrahend denominator) - (denominator * aSubtrahend numerator).
-			newDenominator := denominator * aSubtrahend denominator.
-	
-			^newNumerator / newDenominator ].
-	(aSubtrahend isKindOf: Entero) 
-		ifTrue: [^ self numerator - (aSubtrahend * self denominator)  / self denominator ]. 
+	^ aSubtrahend beSubstractedFromFraccion: self
 ! !
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 13:04:48'!
@@ -577,6 +574,21 @@ beMultipliedWithEntero: anEnteroMultiplicand
 beMultipliedWithFraccion: aFraccionMultiplicand
 
 	^(aFraccionMultiplicand numerator * self numerator) / (aFraccionMultiplicand denominator * self denominator)! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 14:54:27'!
+beSubstractedFromEntero: anEnteroMinuend
+
+	^ (anEnteroMinuend * self denominator - self numerator) / self denominator. ! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'NDS 5/29/2021 15:02:02'!
+beSubstractedFromFraccion: aFraccionMinuend
+	
+	| newNumerator newDenominator |
+	
+	newNumerator := (aFraccionMinuend numerator * self denominator) - (aFraccionMinuend denominator * self numerator).
+	newDenominator := aFraccionMinuend denominator * self denominator.
+
+	^newNumerator / newDenominator ! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
