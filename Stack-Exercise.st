@@ -152,32 +152,41 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 18:48:05'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:07:50'!
 initialize
-	data := OrderedCollection new.! !
+	| first_element |
+	first_element := BaseElement new.
+	data := OrderedCollection new.
+	data addLast: first_element.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 18:49:43'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:56:56'!
 isEmpty
-	^data isEmpty.! !
+	^self size = 0.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 19:12:42'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:55:17'!
 pop
-	data isEmpty ifTrue: [self error: self class stackEmptyErrorDescription].
-	^data removeLast ! !
+	| instance value |
+	instance := data at: data size .
+	value := instance top.
+	
+	data remove: instance.
+	^value! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 18:49:03'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:22:33'!
 push: anElement
+	| ElementToInsert |
+	ElementToInsert := Element with: anElement.
+	data addLast: ElementToInsert.! !
 
-	data addLast: anElement.! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 19:02:01'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:53:12'!
 size 
-	^data size.! !
+	^data size - 1.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'NDS 6/7/2021 19:13:48'!
+!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:55:24'!
 top
-	data isEmpty ifTrue: [self error: self class stackEmptyErrorDescription].
-	^data at: self size
+	| instance |
+	instance := data at: data size.
+	^instance top.
 ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -198,3 +207,53 @@ Object subclass: #SentenceFinderByPrefix
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+
+!classDefinition: #StackElement category: 'Stack-Exercise'!
+Object subclass: #StackElement
+	instanceVariableNames: 'element'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!StackElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 17:58:42'!
+top
+	self subclassResponsibility.! !
+
+
+!classDefinition: #BaseElement category: 'Stack-Exercise'!
+StackElement subclass: #BaseElement
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!BaseElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:51:41'!
+top
+	self error: OOStack stackEmptyErrorDescription.! !
+
+
+!classDefinition: #Element category: 'Stack-Exercise'!
+StackElement subclass: #Element
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!Element methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:10:43'!
+initializeWith: anElement
+	element := anElement.! !
+
+!Element methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 17:59:21'!
+top
+	^element! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Element class' category: 'Stack-Exercise'!
+Element class
+	instanceVariableNames: ''!
+
+!Element class methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:20:46'!
+with: anElement
+	^self new initializeWith: anElement! !
