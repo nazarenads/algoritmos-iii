@@ -144,6 +144,27 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'fmonpelat 6/10/2021 10:40:17'!
+test01SentenceFinderFindWithEmptyStack
+
+	self
+	should: [ SentenceFinderByPrefix with: '' ]
+	raise: Error - MessageNotUnderstood 
+	withExceptionDo: [ :anError |
+		self assert: anError messageText = SentenceFinderByPrefix SentenceFinderByPrefixErrorNotExpectedInstance ]
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'tests' stamp: 'fmonpelat 6/10/2021 12:35:56'!
+test02SentenceFinderCanNotFindWhenThereAreNoObjectsInTheStack
+
+	| stack finder ocurrences|
+	stack := OOStack new.
+	
+	finder := SentenceFinderByPrefix with: stack.
+	
+	ocurrences := finder find: '1'.
+	! !
+
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
@@ -152,42 +173,44 @@ Object subclass: #OOStack
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:07:50'!
-initialize
-	| first_element |
-	first_element := BaseElement new.
-	data := OrderedCollection new.
-	data addLast: first_element.! !
-
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:56:56'!
+!OOStack methodsFor: 'testing' stamp: 'fmonpelat 6/8/2021 18:56:56'!
 isEmpty
 	^self size = 0.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:55:17'!
-pop
-	| instance value |
-	instance := data at: data size .
-	value := instance top.
-	
-	data remove: instance.
-	^value! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:22:33'!
+!OOStack methodsFor: 'stack-operations' stamp: 'fmonpelat 6/9/2021 18:11:14'!
+pop
+	| topInstance content |
+	topInstance := data last.
+	content := topInstance content.
+	
+	data remove: topInstance.
+	^content! !
+
+!OOStack methodsFor: 'stack-operations' stamp: 'fmonpelat 6/8/2021 18:22:33'!
 push: anElement
 	| ElementToInsert |
 	ElementToInsert := Element with: anElement.
 	data addLast: ElementToInsert.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:53:12'!
+!OOStack methodsFor: 'stack-operations' stamp: 'fmonpelat 6/8/2021 18:53:12'!
 size 
 	^data size - 1.! !
 
-!OOStack methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:55:24'!
+!OOStack methodsFor: 'stack-operations' stamp: 'fmonpelat 6/9/2021 18:10:56'!
 top
 	| instance |
-	instance := data at: data size.
-	^instance top.
+	instance := data last.
+	^instance content.
 ! !
+
+
+!OOStack methodsFor: 'initialization' stamp: 'fmonpelat 6/9/2021 17:30:54'!
+initialize
+	| baseOfData |
+	baseOfData := BaseElement new.
+	data := OrderedCollection new.
+	data addLast: baseOfData.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -203,10 +226,64 @@ stackEmptyErrorDescription
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: ''
+	instanceVariableNames: 'originalStack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'operations' stamp: 'fmonpelat 6/10/2021 12:34:26'!
+find: aPrefix
+	
+	| stackAux value collection stackSize|
+	(originalStack isEmpty) ifTrue: [^''].
+	
+	collection := OrderedCollection new.
+	stackAux := OOStack new.
+	stackSize := originalStack size.
+	
+	"loop to find aPrefix on stack values"
+	self loop: [
+		value := originalStack pop.
+		('*',aPrefix,'*' match: value) ifTrue: [ collection addLast: value ].
+		stackAux push: value.
+	] endSize: stackSize.
+
+	"returning original stack as it was"
+	self loop: [
+		value := stackAux pop.
+		originalStack push: value.
+	] endSize: stackSize.
+	^collection.
+
+	! !
+
+
+!SentenceFinderByPrefix methodsFor: 'private' stamp: 'fmonpelat 6/10/2021 12:33:10'!
+loop: aBlock endSize: size
+	1 to: size by: 1 do: [ :index | aBlock value ].! !
+
+
+!SentenceFinderByPrefix methodsFor: 'initialization' stamp: 'fmonpelat 6/10/2021 10:36:56'!
+initializeWith: aOOStack
+	originalStack := aOOStack.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: 'originalStack'!
+
+!SentenceFinderByPrefix class methodsFor: 'error-descriptions' stamp: 'fmonpelat 6/10/2021 10:25:02'!
+SentenceFinderByPrefixErrorNotExpectedInstance
+	^'Should be initialized with an OOStack instance'! !
+
+
+!SentenceFinderByPrefix class methodsFor: 'class initialization' stamp: 'fmonpelat 6/10/2021 10:38:13'!
+with: aOOStack 
+	
+	(aOOStack isKindOf: OOStack) ifFalse: [  self error: SentenceFinderByPrefix SentenceFinderByPrefixErrorNotExpectedInstance ].
+	
+	^self new initializeWith: aOOStack! !
 
 
 !classDefinition: #StackElement category: 'Stack-Exercise'!
@@ -216,8 +293,8 @@ Object subclass: #StackElement
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!StackElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 17:58:42'!
-top
+!StackElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/9/2021 17:29:21'!
+content
 	self subclassResponsibility.! !
 
 
@@ -228,8 +305,8 @@ StackElement subclass: #BaseElement
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!BaseElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:51:41'!
-top
+!BaseElement methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/9/2021 17:29:40'!
+content
 	self error: OOStack stackEmptyErrorDescription.! !
 
 
@@ -240,13 +317,13 @@ StackElement subclass: #Element
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+!Element methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/9/2021 17:29:52'!
+content
+	^element! !
+
 !Element methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 18:10:43'!
 initializeWith: anElement
 	element := anElement.! !
-
-!Element methodsFor: 'as yet unclassified' stamp: 'fmonpelat 6/8/2021 17:59:21'!
-top
-	^element! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
