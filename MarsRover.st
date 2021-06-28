@@ -82,6 +82,16 @@ test09RoverRotatesMultipleTimesRightUntilInitialBearing
 	
 	self assert: marsRover currentBearing = 'N'.! !
 
+!TestMarsRover methodsFor: 'testing' stamp: 'fmonpelat 6/28/2021 20:22:06'!
+test10RoverMovesOnMultipleDirectionsWithValidPositionOnFinish
+	| marsRover |
+	marsRover := MarsRover withPosition: (0@0) andBearing: 'N'.
+	
+	marsRover executeCommands: 'frf'.
+	
+	self assert: marsRover currentBearing = 'E'.
+	self assert: marsRover currentPosition  = (1@1).! !
+
 
 !classDefinition: #MarsRover category: 'MarsRover'!
 Object subclass: #MarsRover
@@ -105,19 +115,24 @@ initializeWithPosition: aIntialPoint andBearing: aInitialBearing
 	currentPosition := aIntialPoint.! !
 
 
-!MarsRover methodsFor: 'operation' stamp: 'fmonpelat 6/27/2021 17:36:46'!
+!MarsRover methodsFor: 'operation' stamp: 'fmonpelat 6/28/2021 20:08:14'!
 executeCommands: someExecuteCommands 
-	| forwardMove backwardsMove |
-	forwardMove := (0@1).
-	backwardsMove := (0@-1).
+	| forwardMoveVertical backwardsMoveVertical forwardMoveHorizontal backwardsMoveHorizontal |
+	forwardMoveVertical := (0@1).
+	backwardsMoveVertical := (0@-1).
+	forwardMoveHorizontal := (1@0).
+	backwardsMoveHorizontal := (-1@0).
+	
 	
 	someExecuteCommands do: [:aCommand | 
-		( aCommand = $f ) ifTrue: [ currentPosition := self currentPosition  +  forwardMove ].
-		( aCommand = $b ) ifTrue: [ currentPosition := self currentPosition  +  backwardsMove ].
+		( aCommand = $f ) ifTrue: [ currentPosition := (currentBearing = 90 or: [currentBearing = 270]) ifTrue: [ self currentPosition  +  forwardMoveHorizontal ]
+																				ifFalse: [ self currentPosition  +  forwardMoveVertical ]].
+		( aCommand = $b ) ifTrue: [ currentPosition := (currentBearing = 0 or: [currentBearing = 180]) ifTrue: [ self currentPosition  +  backwardsMoveVertical ]
+																				ifFalse: [ self currentPosition  +  backwardsMoveHorizontal ]].
 		(aCommand = $r ) ifTrue: [ currentBearing := (currentBearing + 90) = 360 ifTrue: [0] ifFalse: [currentBearing + 90] ].
 		(aCommand = $l ) ifTrue: [ currentBearing :=  ((currentBearing - 90)<0 ifTrue: [currentBearing - 90 + 360] ifFalse: [currentBearing - 90]) ].
 	].
-	! !
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
