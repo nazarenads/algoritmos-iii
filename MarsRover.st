@@ -93,6 +93,132 @@ test10RoverMovesOnMultipleDirectionsWithValidPositionOnFinish
 	self assert: marsRover currentPosition  = (1@1).! !
 
 
+!classDefinition: #Command category: 'MarsRover'!
+Object subclass: #Command
+	instanceVariableNames: 'command'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+
+!Command methodsFor: 'initialization' stamp: 'NDS 6/29/2021 20:12:06'!
+executeFor: aCommand withBearing: aBearing andPosition: aPosition
+
+	command := (Command allSubclasses detect:[:aClass | aClass canHandle: aCommand]) new.
+	^command executeCommandWithBearing: aBearing andPosition: aPosition
+
+! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Command class' category: 'MarsRover'!
+Command class
+	instanceVariableNames: ''!
+
+!Command class methodsFor: 'instance creation' stamp: 'NDS 6/29/2021 20:06:19'!
+executeFor: aCommand withBearing: aBearing andPosition: aPosition
+	^self new executeFor: aCommand withBearing: aBearing andPosition: aPosition
+! !
+
+
+!classDefinition: #MoveBackward category: 'MarsRover'!
+Command subclass: #MoveBackward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MoveBackward methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:07:31'!
+executeCommandWithBearing: currentBearing andPosition: currentPosition
+
+	 | backwardMoveHorizontal backwardMoveVertical|
+	backwardMoveHorizontal := (-1@0).
+	backwardMoveVertical := (0@-1).
+	^(currentBearing = 90 or: [currentBearing = 270]) ifTrue: [ currentPosition  +  backwardMoveHorizontal ] ifFalse: [currentPosition + backwardMoveVertical]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MoveBackward class' category: 'MarsRover'!
+MoveBackward class
+	instanceVariableNames: ''!
+
+!MoveBackward class methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:54:33'!
+canHandle: aCommand
+	^aCommand = $b.! !
+
+
+!classDefinition: #MoveForward category: 'MarsRover'!
+Command subclass: #MoveForward
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!MoveForward methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 20:10:15'!
+executeCommandWithBearing: currentBearing andPosition: currentPosition
+
+	 | forwardMoveHorizontal forwardMoveVertical |
+	forwardMoveHorizontal := (1@0).
+	forwardMoveVertical := (0@1).
+	^(currentBearing = 90 or: [currentBearing = 270]) ifTrue: [ currentPosition  +  forwardMoveHorizontal ] ifFalse: [ currentPosition  +  forwardMoveVertical ].! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MoveForward class' category: 'MarsRover'!
+MoveForward class
+	instanceVariableNames: ''!
+
+!MoveForward class methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:54:49'!
+canHandle: aCommand
+	^aCommand = $f.! !
+
+
+!classDefinition: #TurnLeft category: 'MarsRover'!
+Command subclass: #TurnLeft
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!TurnLeft methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:09:45'!
+executeCommandWithBearing: currentBearing andPosition: currentPosition
+
+	^(currentBearing - 90)<0 ifTrue: [currentBearing - 90 + 360] ifFalse: [currentBearing - 90]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TurnLeft class' category: 'MarsRover'!
+TurnLeft class
+	instanceVariableNames: ''!
+
+!TurnLeft class methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:54:57'!
+canHandle: aCommand
+	^aCommand = $l.! !
+
+
+!classDefinition: #TurnRight category: 'MarsRover'!
+Command subclass: #TurnRight
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!TurnRight methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:09:45'!
+executeCommandWithBearing: currentBearing andPosition: currentPosition
+
+	^(currentBearing + 90) = 360 ifTrue: [0] ifFalse: [currentBearing + 90]! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TurnRight class' category: 'MarsRover'!
+TurnRight class
+	instanceVariableNames: ''!
+
+!TurnRight class methodsFor: 'as yet unclassified' stamp: 'NDS 6/29/2021 19:55:04'!
+canHandle: aCommand
+	^aCommand = $r.! !
+
+
 !classDefinition: #MarsRover category: 'MarsRover'!
 Object subclass: #MarsRover
 	instanceVariableNames: 'currentPosition currentBearing'
@@ -115,22 +241,12 @@ initializeWithPosition: aIntialPoint andBearing: aInitialBearing
 	currentPosition := aIntialPoint.! !
 
 
-!MarsRover methodsFor: 'operation' stamp: 'fmonpelat 6/28/2021 20:08:14'!
+!MarsRover methodsFor: 'operation' stamp: 'NDS 6/29/2021 20:08:29'!
 executeCommands: someExecuteCommands 
-	| forwardMoveVertical backwardsMoveVertical forwardMoveHorizontal backwardsMoveHorizontal |
-	forwardMoveVertical := (0@1).
-	backwardsMoveVertical := (0@-1).
-	forwardMoveHorizontal := (1@0).
-	backwardsMoveHorizontal := (-1@0).
-	
-	
+
 	someExecuteCommands do: [:aCommand | 
-		( aCommand = $f ) ifTrue: [ currentPosition := (currentBearing = 90 or: [currentBearing = 270]) ifTrue: [ self currentPosition  +  forwardMoveHorizontal ]
-																				ifFalse: [ self currentPosition  +  forwardMoveVertical ]].
-		( aCommand = $b ) ifTrue: [ currentPosition := (currentBearing = 0 or: [currentBearing = 180]) ifTrue: [ self currentPosition  +  backwardsMoveVertical ]
-																				ifFalse: [ self currentPosition  +  backwardsMoveHorizontal ]].
-		(aCommand = $r ) ifTrue: [ currentBearing := (currentBearing + 90) = 360 ifTrue: [0] ifFalse: [currentBearing + 90] ].
-		(aCommand = $l ) ifTrue: [ currentBearing :=  ((currentBearing - 90)<0 ifTrue: [currentBearing - 90 + 360] ifFalse: [currentBearing - 90]) ].
+		Command executeFor: aCommand withBearing: currentBearing andPosition: currentPosition
+
 	].
 ! !
 
