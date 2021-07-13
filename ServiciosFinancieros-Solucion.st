@@ -531,18 +531,12 @@ addTransactionsTo: aCollectionOfTransactions
 	self subclassResponsibility ! !
 
 
-!Account methodsFor: 'accessing' stamp: 'NDS 7/11/2021 18:06:20'!
+!Account methodsFor: 'accessing' stamp: 'NDS 7/12/2021 21:15:12'!
 summary
-	| summary |
-	summary := OrderedCollection new. 
-	self transactions do: [:aTransaction | 
-		(aTransaction isKindOf: Deposit) ifTrue: [ summary add: 'Depósito por ',aTransaction value asString].
-		(aTransaction isKindOf: Withdraw) ifTrue: [ summary add: 'Extracción por ',aTransaction value asString].
-		(aTransaction isKindOf: TransferWithdrawLeg ) ifTrue: [ summary add: 'Salida por transferencia de ',aTransaction value asString].
-		(aTransaction isKindOf: TransferDepositLeg ) ifTrue: [ summary add: 'Entrada por transferencia de ',aTransaction value asString].
-	].
-	summary add: 'Balance = ', self balance asString.
-	^summary! !
+	| aReport |
+	aReport := Report for: self.
+	^aReport create.
+	! !
 
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Solucion'!
@@ -688,6 +682,11 @@ affectBalance: aBalance
 
 	self subclassResponsibility ! !
 
+
+!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 20:17:07'!
+summary 
+	self subclassResponsibility .! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'AccountTransaction class' category: 'ServiciosFinancieros-Solucion'!
@@ -728,6 +727,11 @@ value
 affectBalance: aBalance
 
 	^aBalance + value ! !
+
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:03'!
+summary: aReport
+	^aReport reportMessageforDeposit: self value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -794,6 +798,11 @@ affectBalance: aBalance
 
 	^aBalance + self value! !
 
+
+!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:06'!
+summary: aReport
+	^aReport reportMessageforTransferDepositLeg: self value.! !
+
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
 TransferLeg subclass: #TransferWithdrawLeg
@@ -812,6 +821,11 @@ depositLeg
 affectBalance: aBalance
 
 	^aBalance - self value! !
+
+
+!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:24'!
+summary: aReport
+	^aReport reportMessageforTransferWithdrawLeg: self value.! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -838,6 +852,11 @@ affectBalance: aBalance
 
 	^aBalance - value! !
 
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:51'!
+summary: aReport
+	^aReport reportMessageforWithdraw: self value.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Solucion'!
@@ -848,6 +867,54 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #Report category: 'ServiciosFinancieros-Solucion'!
+Object subclass: #Report
+	instanceVariableNames: 'account'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:15:49'!
+create
+	| summary |
+	summary := OrderedCollection new. 
+	account transactions do: [:aTransaction | 
+		summary add: (aTransaction summary: self).
+	].
+	summary add: 'Balance = ', account balance asString.
+	^summary! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:11:06'!
+initializeFor: anAccount
+	account := anAccount! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:24'!
+reportMessageforDeposit: value
+	^'Depósito por ',value asString.! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:30'!
+reportMessageforTransferDepositLeg: value
+	^'Entrada por transferencia de ', value asString.! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:42'!
+reportMessageforTransferWithdrawLeg: value
+	^'Salida por transferencia de ', value asString.! !
+
+!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:47'!
+reportMessageforWithdraw: value
+	^'Extracción por ',value asString.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Report class' category: 'ServiciosFinancieros-Solucion'!
+Report class
+	instanceVariableNames: ''!
+
+!Report class methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 20:38:39'!
+for: anAccount
+	^self new initializeFor: anAccount.! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Solucion'!
