@@ -1,169 +1,13 @@
-!classDefinition: #AccountSummaryTest category: 'ServiciosFinancieros-Solucion'!
-TestCase subclass: #AccountSummaryTest
+!classDefinition: #AccountTests category: 'ServiciosFinancieros-Solucion'!
+TestCase subclass: #AccountTests
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:12:31'!
-test01AccountSummaryForEmptyAccountReturnsExpectedBalanceString
-	| account accountSummary |
-	
-	account := ReceptiveAccount new.
-	
-	accountSummary := OrderedCollection with: 'Balance = 0 pesos'.
-	
-	
-	self assert: accountSummary equals: (account summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:13:20'!
-test02AccountSummaryForAccountWithOneDepositReturnsExpectedDepositString
-	| account accountSummary |
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 * peso on: account.
-	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
-	
-	
-	self assert: accountSummary equals: (account summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:19:42'!
-test03AccountSummaryForAccountWithOneWithdrawReturnsExpectedWithdrawString
-	| account accountSummary |
-	
-	account := ReceptiveAccount new.
-	Withdraw register: 100 * peso on: account.
-	accountSummary := OrderedCollection with: 'Extracción por 100 pesos' with: 'Balance = -100 pesos'.
-	
-	
-	self assert: accountSummary equals: (account summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:10'!
-test04AccountSummaryForOriginAccountWithTransferReturnsExpectedSummary
-	| accountSummary originAccount destinationAccount |
-	
-	
-	originAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: originAccount.
-	
-	destinationAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: destinationAccount.
-	
-	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
-	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Salida por transferencia de 2 pesos' with: 'Balance = 8 pesos'.
-	
-	
-	self assert: accountSummary equals: (originAccount summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:19'!
-test05AccountSummaryForDestinationAccountWithTransferReturnsExpectedSummary
-	| accountSummary originAccount destinationAccount |
-	
-	
-	originAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: originAccount.
-	
-	destinationAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: destinationAccount.
-	
-	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
-	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Entrada por transferencia de 2 pesos' with: 'Balance = 12 pesos'.
-	
-	
-	self assert: accountSummary equals: (destinationAccount summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:27:29'!
-test06AccountSummaryForEmptyPortfolioReturnsExpectedBalanceString
-	| portfolio accountSummary |
-	
-	portfolio := Portfolio new.
-	
-	accountSummary := OrderedCollection with: 'Balance = 0 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolio summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:59:50'!
-test07AccountSummaryForPortfolioWithAccountThatHasADepositReturnsExpectedBalanceString
-	| portfolio account accountSummary |
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 * peso on: account.
-	portfolio := Portfolio with: account.
-	
-	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolio summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:11'!
-test08AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
-	| portfolio account accountSummary |
-	
-	account := ReceptiveAccount new.
-	Withdraw register: 100 * peso on: account.
-	portfolio := Portfolio with: account.
-	
-	accountSummary := OrderedCollection with: 'Extracción por 100 pesos' with: 'Balance = -100 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolio summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:19'!
-test09AccountSummaryForPortfolioWithAccountWithATransferReturnsExpectedString
-	| portfolio accountSummary originAccount destinationAccount|
-	
-	originAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: originAccount.
-	
-	destinationAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: destinationAccount.
-	
-	portfolio := Portfolio with: originAccount.
-	
-	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
-	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Salida por transferencia de 2 pesos' with: 'Balance = 8 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolio summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:27'!
-test10AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
-	| portfolio accountSummary originAccount destinationAccount|
-	
-	originAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: originAccount.
-	
-	destinationAccount := ReceptiveAccount new.
-	Deposit register: 10 * peso on: destinationAccount.
-	
-	portfolio := Portfolio with: destinationAccount.
-	
-	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
-	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Entrada por transferencia de 2 pesos' with: 'Balance = 12 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolio summary).	! !
-
-!AccountSummaryTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:04:34'!
-test11AccountSummaryForPortfolioWithPortfolioThatHasAnAccountWithOneDepositReturnsExpectedString
-	| portfolio account accountSummary portfolioFather |
-	
-	account := ReceptiveAccount new.
-	Deposit register: 100 * peso on: account.
-	portfolio := Portfolio with: account.
-	
-	portfolioFather := Portfolio with: portfolio.
-	
-	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
-	
-	
-	self assert: accountSummary equals: (portfolioFather summary).
-		! !
-
 
 !classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Solucion'!
-TestCase subclass: #PortfolioTest
+AccountTests subclass: #PortfolioTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -273,7 +117,7 @@ test09PortfolioTransactionsAreCalculatedRecursively
 
 
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Solucion'!
-TestCase subclass: #ReceptiveAccountTest
+AccountTests subclass: #ReceptiveAccountTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -363,8 +207,180 @@ test07AccountKnowsItsTransactions
 ! !
 
 
+!classDefinition: #ReportsTests category: 'ServiciosFinancieros-Solucion'!
+TestCase subclass: #ReportsTests
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+
+!classDefinition: #SummaryReportsTest category: 'ServiciosFinancieros-Solucion'!
+ReportsTests subclass: #SummaryReportsTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:12:31'!
+test01AccountSummaryForEmptyAccountReturnsExpectedBalanceString
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	
+	accountSummary := OrderedCollection with: 'Balance = 0 pesos'.
+	
+	
+	self assert: accountSummary equals: (account summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:13:20'!
+test02AccountSummaryForAccountWithOneDepositReturnsExpectedDepositString
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
+	
+	
+	self assert: accountSummary equals: (account summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:19:42'!
+test03AccountSummaryForAccountWithOneWithdrawReturnsExpectedWithdrawString
+	| account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Withdraw register: 100 * peso on: account.
+	accountSummary := OrderedCollection with: 'Extracción por 100 pesos' with: 'Balance = -100 pesos'.
+	
+	
+	self assert: accountSummary equals: (account summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:10'!
+test04AccountSummaryForOriginAccountWithTransferReturnsExpectedSummary
+	| accountSummary originAccount destinationAccount |
+	
+	
+	originAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: originAccount.
+	
+	destinationAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: destinationAccount.
+	
+	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
+	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Salida por transferencia de 2 pesos' with: 'Balance = 8 pesos'.
+	
+	
+	self assert: accountSummary equals: (originAccount summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:19'!
+test05AccountSummaryForDestinationAccountWithTransferReturnsExpectedSummary
+	| accountSummary originAccount destinationAccount |
+	
+	
+	originAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: originAccount.
+	
+	destinationAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: destinationAccount.
+	
+	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
+	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Entrada por transferencia de 2 pesos' with: 'Balance = 12 pesos'.
+	
+	
+	self assert: accountSummary equals: (destinationAccount summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:27:29'!
+test06AccountSummaryForEmptyPortfolioReturnsExpectedBalanceString
+	| portfolio accountSummary |
+	
+	portfolio := Portfolio new.
+	
+	accountSummary := OrderedCollection with: 'Balance = 0 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolio summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:59:50'!
+test07AccountSummaryForPortfolioWithAccountThatHasADepositReturnsExpectedBalanceString
+	| portfolio account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	portfolio := Portfolio with: account.
+	
+	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolio summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:11'!
+test08AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
+	| portfolio account accountSummary |
+	
+	account := ReceptiveAccount new.
+	Withdraw register: 100 * peso on: account.
+	portfolio := Portfolio with: account.
+	
+	accountSummary := OrderedCollection with: 'Extracción por 100 pesos' with: 'Balance = -100 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolio summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:19'!
+test09AccountSummaryForPortfolioWithAccountWithATransferReturnsExpectedString
+	| portfolio accountSummary originAccount destinationAccount|
+	
+	originAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: originAccount.
+	
+	destinationAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: destinationAccount.
+	
+	portfolio := Portfolio with: originAccount.
+	
+	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
+	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Salida por transferencia de 2 pesos' with: 'Balance = 8 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolio summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:27'!
+test10AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
+	| portfolio accountSummary originAccount destinationAccount|
+	
+	originAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: originAccount.
+	
+	destinationAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: destinationAccount.
+	
+	portfolio := Portfolio with: destinationAccount.
+	
+	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
+	accountSummary := OrderedCollection with: 'Depósito por 10 pesos' with: 'Entrada por transferencia de 2 pesos' with: 'Balance = 12 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolio summary).	! !
+
+!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:04:34'!
+test11AccountSummaryForPortfolioWithPortfolioThatHasAnAccountWithOneDepositReturnsExpectedString
+	| portfolio account accountSummary portfolioFather |
+	
+	account := ReceptiveAccount new.
+	Deposit register: 100 * peso on: account.
+	portfolio := Portfolio with: account.
+	
+	portfolioFather := Portfolio with: portfolio.
+	
+	accountSummary := OrderedCollection with: 'Depósito por 100 pesos' with: 'Balance = 100 pesos'.
+	
+	
+	self assert: accountSummary equals: (portfolioFather summary).
+		! !
+
+
 !classDefinition: #TransferNetTest category: 'ServiciosFinancieros-Solucion'!
-TestCase subclass: #TransferNetTest
+ReportsTests subclass: #TransferNetTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
@@ -395,6 +411,24 @@ test02TransferNetForAccountWithOneTransferReturnsExpectedValue
 	
 	self assert: -2 equals: originAccount transferNet.
 	self assert: 2 equals: destinationAccount transferNet.
+	! !
+
+!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:31:47'!
+test03TransferNetForPortfolioWithAnAccountThatTransferedReturnsExpectedValue
+	
+	| destinationAccount originAccount portfolio |
+	
+	originAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: originAccount.
+	
+	destinationAccount := ReceptiveAccount new.
+	Deposit register: 10 * peso on: destinationAccount.
+	
+	Transfer amount: 2 * peso from: originAccount to: destinationAccount.
+	
+	portfolio := Portfolio with: originAccount.
+	
+	self assert: -2 equals: portfolio transferNet.
 	! !
 
 
@@ -531,12 +565,18 @@ addTransactionsTo: aCollectionOfTransactions
 	self subclassResponsibility ! !
 
 
-!Account methodsFor: 'accessing' stamp: 'NDS 7/12/2021 21:15:12'!
+!Account methodsFor: 'accessing' stamp: 'fmonpelat 7/15/2021 11:38:16'!
 summary
 	| aReport |
-	aReport := Report for: self.
+	aReport := SummaryReport for: self.
 	^aReport create.
 	! !
+
+!Account methodsFor: 'accessing' stamp: 'fmonpelat 7/15/2021 11:45:47'!
+transferNet
+	| aReport |
+	aReport := TransferNetReport for: self.
+	^aReport create.! !
 
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Solucion'!
@@ -653,16 +693,6 @@ addTransactionsTo: aCollectionOfTransactions
 	aCollectionOfTransactions addAll: transactions ! !
 
 
-!ReceptiveAccount methodsFor: 'accessing' stamp: 'NDS 7/11/2021 18:28:13'!
-transferNet
-	| transferNet |
-	transferNet := 0. 
-	self transactions do: [:aTransaction | 
-		(aTransaction isKindOf: TransferWithdrawLeg ) ifTrue: [ transferNet := transferNet - aTransaction value amount].
-		(aTransaction isKindOf: TransferDepositLeg ) ifTrue: [transferNet := transferNet + aTransaction value amount].
-	].
-	^transferNet! !
-
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Solucion'!
 Object subclass: #AccountTransaction
@@ -728,6 +758,10 @@ affectBalance: aBalance
 
 	^aBalance + value ! !
 
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:26:46'!
+calculateTransferNetFrom: aTransaferNetValue
+	^aTransaferNetValue! !
 
 !Deposit methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:03'!
 summary: aReport
@@ -799,6 +833,10 @@ affectBalance: aBalance
 	^aBalance + self value! !
 
 
+!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:34:47'!
+calculateTransferNetFrom: aTransaferNetValue
+	^(aTransaferNetValue + (self value amount))! !
+
 !TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:06'!
 summary: aReport
 	^aReport reportMessageforTransferDepositLeg: self value.! !
@@ -822,6 +860,10 @@ affectBalance: aBalance
 
 	^aBalance - self value! !
 
+
+!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:34:57'!
+calculateTransferNetFrom: aTransaferNetValue
+	^(aTransaferNetValue - (self value amount)).! !
 
 !TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:24'!
 summary: aReport
@@ -853,6 +895,10 @@ affectBalance: aBalance
 	^aBalance - value! !
 
 
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:26:57'!
+calculateTransferNetFrom: aTransaferNetValue
+	^aTransaferNetValue! !
+
 !Withdraw methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:51'!
 summary: aReport
 	^aReport reportMessageforWithdraw: self value.! !
@@ -869,14 +915,58 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #Report category: 'ServiciosFinancieros-Solucion'!
-Object subclass: #Report
+!classDefinition: #Reports category: 'ServiciosFinancieros-Solucion'!
+Object subclass: #Reports
 	instanceVariableNames: 'account'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:15:49'!
+!Reports methodsFor: 'creation' stamp: 'fmonpelat 7/15/2021 11:38:48'!
+create
+	self subclassResponsibility.! !
+
+
+!Reports methodsFor: 'initialization' stamp: 'fmonpelat 7/15/2021 11:39:14'!
+initializeFor: anAccount
+	account := anAccount! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Reports class' category: 'ServiciosFinancieros-Solucion'!
+Reports class
+	instanceVariableNames: ''!
+
+!Reports class methodsFor: 'initialization' stamp: 'fmonpelat 7/15/2021 11:39:38'!
+for: anAccount
+	^self new initializeFor: anAccount.! !
+
+
+!classDefinition: #SummaryReport category: 'ServiciosFinancieros-Solucion'!
+Reports subclass: #SummaryReport
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
+
+!SummaryReport methodsFor: 'summary-messages' stamp: 'NDS 7/12/2021 21:12:24'!
+reportMessageforDeposit: value
+	^'Depósito por ',value asString.! !
+
+!SummaryReport methodsFor: 'summary-messages' stamp: 'NDS 7/12/2021 21:12:30'!
+reportMessageforTransferDepositLeg: value
+	^'Entrada por transferencia de ', value asString.! !
+
+!SummaryReport methodsFor: 'summary-messages' stamp: 'NDS 7/12/2021 21:12:42'!
+reportMessageforTransferWithdrawLeg: value
+	^'Salida por transferencia de ', value asString.! !
+
+!SummaryReport methodsFor: 'summary-messages' stamp: 'NDS 7/12/2021 21:12:47'!
+reportMessageforWithdraw: value
+	^'Extracción por ',value asString.! !
+
+
+!SummaryReport methodsFor: 'creation' stamp: 'NDS 7/12/2021 21:15:49'!
 create
 	| summary |
 	summary := OrderedCollection new. 
@@ -886,35 +976,22 @@ create
 	summary add: 'Balance = ', account balance asString.
 	^summary! !
 
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:11:06'!
-initializeFor: anAccount
-	account := anAccount! !
+
+!classDefinition: #TransferNetReport category: 'ServiciosFinancieros-Solucion'!
+Reports subclass: #TransferNetReport
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Solucion'!
 
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:24'!
-reportMessageforDeposit: value
-	^'Depósito por ',value asString.! !
-
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:30'!
-reportMessageforTransferDepositLeg: value
-	^'Entrada por transferencia de ', value asString.! !
-
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:42'!
-reportMessageforTransferWithdrawLeg: value
-	^'Salida por transferencia de ', value asString.! !
-
-!Report methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:47'!
-reportMessageforWithdraw: value
-	^'Extracción por ',value asString.! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Report class' category: 'ServiciosFinancieros-Solucion'!
-Report class
-	instanceVariableNames: ''!
-
-!Report class methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 20:38:39'!
-for: anAccount
-	^self new initializeFor: anAccount.! !
+!TransferNetReport methodsFor: 'creation' stamp: 'fmonpelat 7/15/2021 11:50:38'!
+create
+	| transferNet |
+	transferNet := 0. 
+	(account transactions) do: [:aTransaction | 
+		transferNet := aTransaction calculateTransferNetFrom: transferNet .
+	].
+	^transferNet! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Solucion'!
