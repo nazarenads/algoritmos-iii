@@ -222,7 +222,7 @@ ReportsTests subclass: #SummaryReportsTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:12:31'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:12:31'!
 test01AccountSummaryForEmptyAccountReturnsExpectedBalanceString
 	| account accountSummary |
 	
@@ -233,7 +233,7 @@ test01AccountSummaryForEmptyAccountReturnsExpectedBalanceString
 	
 	self assert: accountSummary equals: (account summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:13:20'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:13:20'!
 test02AccountSummaryForAccountWithOneDepositReturnsExpectedDepositString
 	| account accountSummary |
 	
@@ -244,7 +244,7 @@ test02AccountSummaryForAccountWithOneDepositReturnsExpectedDepositString
 	
 	self assert: accountSummary equals: (account summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:19:42'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:19:42'!
 test03AccountSummaryForAccountWithOneWithdrawReturnsExpectedWithdrawString
 	| account accountSummary |
 	
@@ -255,7 +255,7 @@ test03AccountSummaryForAccountWithOneWithdrawReturnsExpectedWithdrawString
 	
 	self assert: accountSummary equals: (account summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:10'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:20:10'!
 test04AccountSummaryForOriginAccountWithTransferReturnsExpectedSummary
 	| accountSummary originAccount destinationAccount |
 	
@@ -272,7 +272,7 @@ test04AccountSummaryForOriginAccountWithTransferReturnsExpectedSummary
 	
 	self assert: accountSummary equals: (originAccount summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:20:19'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:20:19'!
 test05AccountSummaryForDestinationAccountWithTransferReturnsExpectedSummary
 	| accountSummary originAccount destinationAccount |
 	
@@ -289,7 +289,7 @@ test05AccountSummaryForDestinationAccountWithTransferReturnsExpectedSummary
 	
 	self assert: accountSummary equals: (destinationAccount summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:27:29'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:27:29'!
 test06AccountSummaryForEmptyPortfolioReturnsExpectedBalanceString
 	| portfolio accountSummary |
 	
@@ -300,7 +300,7 @@ test06AccountSummaryForEmptyPortfolioReturnsExpectedBalanceString
 	
 	self assert: accountSummary equals: (portfolio summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 17:59:50'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 17:59:50'!
 test07AccountSummaryForPortfolioWithAccountThatHasADepositReturnsExpectedBalanceString
 	| portfolio account accountSummary |
 	
@@ -313,7 +313,7 @@ test07AccountSummaryForPortfolioWithAccountThatHasADepositReturnsExpectedBalance
 	
 	self assert: accountSummary equals: (portfolio summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:11'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:00:11'!
 test08AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
 	| portfolio account accountSummary |
 	
@@ -326,7 +326,7 @@ test08AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
 	
 	self assert: accountSummary equals: (portfolio summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:19'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:00:19'!
 test09AccountSummaryForPortfolioWithAccountWithATransferReturnsExpectedString
 	| portfolio accountSummary originAccount destinationAccount|
 	
@@ -344,7 +344,7 @@ test09AccountSummaryForPortfolioWithAccountWithATransferReturnsExpectedString
 	
 	self assert: accountSummary equals: (portfolio summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:00:27'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:00:27'!
 test10AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
 	| portfolio accountSummary originAccount destinationAccount|
 	
@@ -362,7 +362,7 @@ test10AccountSummaryForPortfolioWithAccountWithOneWithdrawReturnsExpectedString
 	
 	self assert: accountSummary equals: (portfolio summary).	! !
 
-!SummaryReportsTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:04:34'!
+!SummaryReportsTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:04:34'!
 test11AccountSummaryForPortfolioWithPortfolioThatHasAnAccountWithOneDepositReturnsExpectedString
 	| portfolio account accountSummary portfolioFather |
 	
@@ -386,7 +386,7 @@ ReportsTests subclass: #TransferNetTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:16:47'!
+!TransferNetTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:16:47'!
 test01TransferNetForEmptyAccountReturnsZero
 	
 	| account |
@@ -396,7 +396,7 @@ test01TransferNetForEmptyAccountReturnsZero
 	self assert: 0 equals: account transferNet.
 	! !
 
-!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'NDS 7/11/2021 18:19:26'!
+!TransferNetTest methodsFor: 'testing' stamp: 'NDS 7/11/2021 18:19:26'!
 test02TransferNetForAccountWithOneTransferReturnsExpectedValue
 	
 	| destinationAccount originAccount |
@@ -413,7 +413,7 @@ test02TransferNetForAccountWithOneTransferReturnsExpectedValue
 	self assert: 2 equals: destinationAccount transferNet.
 	! !
 
-!TransferNetTest methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:31:47'!
+!TransferNetTest methodsFor: 'testing' stamp: 'fmonpelat 7/15/2021 11:31:47'!
 test03TransferNetForPortfolioWithAnAccountThatTransferedReturnsExpectedValue
 	
 	| destinationAccount originAccount portfolio |
@@ -439,7 +439,7 @@ TestCase subclass: #TransferTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 21:07:03'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 21:07:03'!
 test01ATransferDecreasesBalanceFromOriginAccountAndIncreasesItForDestinationAccount
 
 	| destinationAccount originAccount |
@@ -455,7 +455,7 @@ test01ATransferDecreasesBalanceFromOriginAccountAndIncreasesItForDestinationAcco
 	self assert: 8 * peso equals: originAccount balance.
 	self assert: 12 * peso equals: destinationAccount balance.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 21:12:28'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 21:12:28'!
 test02ATransferKnowsItsValue
 
 	| destinationAccount originAccount transfer |
@@ -470,7 +470,7 @@ test02ATransferKnowsItsValue
 	
 	self assert: 2 * peso equals: transfer value.! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:01:44'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 23:01:44'!
 test03DepositLegKnowsItsWithdrawCounterpart
 
 	| destinationAccount originAccount transfer |
@@ -485,7 +485,7 @@ test03DepositLegKnowsItsWithdrawCounterpart
 	
 	self assert: transfer withdrawLeg equals: transfer depositLeg withdrawLeg! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:01:51'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 23:01:51'!
 test04WithdrawLegKnowsItsDepositCounterpart
 
 	| destinationAccount originAccount transfer |
@@ -500,7 +500,7 @@ test04WithdrawLegKnowsItsDepositCounterpart
 	
 	self assert: transfer depositLeg equals: transfer withdrawLeg depositLeg! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:02:36'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 23:02:36'!
 test05OriginAndDestinationAccountsCannotBeTheSame
 
 	| originAccount |
@@ -516,7 +516,7 @@ test05OriginAndDestinationAccountsCannotBeTheSame
 		]
 ! !
 
-!TransferTest methodsFor: 'as yet unclassified' stamp: 'LL 9/20/2020 23:02:44'!
+!TransferTest methodsFor: 'testing' stamp: 'LL 9/20/2020 23:02:44'!
 test06CannotTransferAZeroAmount
 
 	| originAccount destinationAccount |
@@ -713,9 +713,13 @@ affectBalance: aBalance
 	self subclassResponsibility ! !
 
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 20:17:07'!
-summary 
-	self subclassResponsibility .! !
+!AccountTransaction methodsFor: 'reporting' stamp: 'fmonpelat 7/15/2021 16:38:23'!
+summary: aReport
+	self subclassResponsibility.! !
+
+!AccountTransaction methodsFor: 'reporting' stamp: 'fmonpelat 7/15/2021 16:38:52'!
+transferNetFromReport: aReport withNetValue: aNetValue
+	self subclassResponsibility.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -759,13 +763,13 @@ affectBalance: aBalance
 	^aBalance + value ! !
 
 
-!Deposit methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:26:46'!
-calculateTransferNetFrom: aTransaferNetValue
-	^aTransaferNetValue! !
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:12:03'!
+!Deposit methodsFor: 'reporting' stamp: 'NDS 7/12/2021 21:12:03'!
 summary: aReport
 	^aReport reportMessageforDeposit: self value.! !
+
+!Deposit methodsFor: 'reporting' stamp: 'fmonpelat 7/15/2021 16:27:55'!
+transferNetFromReport: aReport withNetValue: aNetValue
+	^aNetValue ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -833,13 +837,13 @@ affectBalance: aBalance
 	^aBalance + self value! !
 
 
-!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:34:47'!
-calculateTransferNetFrom: aTransaferNetValue
-	^(aTransaferNetValue + (self value amount))! !
-
-!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:06'!
+!TransferDepositLeg methodsFor: 'reporting' stamp: 'NDS 7/12/2021 21:13:06'!
 summary: aReport
 	^aReport reportMessageforTransferDepositLeg: self value.! !
+
+!TransferDepositLeg methodsFor: 'reporting' stamp: 'fmonpelat 7/15/2021 16:35:04'!
+transferNetFromReport: aReport withNetValue: aNetValue
+	^aReport calculateForTransferDepositLeg: self withNetValue: aNetValue.! !
 
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
@@ -861,13 +865,13 @@ affectBalance: aBalance
 	^aBalance - self value! !
 
 
-!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:34:57'!
-calculateTransferNetFrom: aTransaferNetValue
-	^(aTransaferNetValue - (self value amount)).! !
-
-!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:24'!
+!TransferWithdrawLeg methodsFor: 'reporting' stamp: 'NDS 7/12/2021 21:13:24'!
 summary: aReport
 	^aReport reportMessageforTransferWithdrawLeg: self value.! !
+
+!TransferWithdrawLeg methodsFor: 'reporting' stamp: 'fmonpelat 7/15/2021 16:35:24'!
+transferNetFromReport: aReport withNetValue: aNetValue
+	^aReport calculateForTransferWithdrawLeg: self withNetValue: aNetValue.! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -895,13 +899,14 @@ affectBalance: aBalance
 	^aBalance - value! !
 
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 11:26:57'!
-calculateTransferNetFrom: aTransaferNetValue
-	^aTransaferNetValue! !
 
 !Withdraw methodsFor: 'as yet unclassified' stamp: 'NDS 7/12/2021 21:13:51'!
 summary: aReport
 	^aReport reportMessageforWithdraw: self value.! !
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/15/2021 16:28:12'!
+transferNetFromReport: aReport withNetValue: aNetValue
+	^aNetValue ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -984,14 +989,23 @@ Reports subclass: #TransferNetReport
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferNetReport methodsFor: 'creation' stamp: 'fmonpelat 7/15/2021 11:50:38'!
+!TransferNetReport methodsFor: 'creation' stamp: 'fmonpelat 7/15/2021 16:31:31'!
 create
 	| transferNet |
 	transferNet := 0. 
 	(account transactions) do: [:aTransaction | 
-		transferNet := aTransaction calculateTransferNetFrom: transferNet .
+		transferNet := aTransaction transferNetFromReport: self withNetValue: transferNet .
 	].
 	^transferNet! !
+
+
+!TransferNetReport methodsFor: 'transferNet-operations' stamp: 'fmonpelat 7/15/2021 16:34:27'!
+calculateForTransferDepositLeg: anAccountTransaction withNetValue: aTransferNetValue
+	^(aTransferNetValue + (anAccountTransaction value amount))! !
+
+!TransferNetReport methodsFor: 'transferNet-operations' stamp: 'fmonpelat 7/15/2021 16:33:59'!
+calculateForTransferWithdrawLeg: anAccountTransaction withNetValue: aTransferNetValue
+	^(aTransferNetValue - (anAccountTransaction value amount))! !
 
 
 !classDefinition: #Transfer category: 'ServiciosFinancieros-Solucion'!
