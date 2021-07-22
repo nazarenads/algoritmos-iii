@@ -240,9 +240,75 @@ test09LogHeadingWhenRotatingNorth
 	self assert: '1@0' equals: log obtain second.! !
 
 
+!classDefinition: #TestMarsRoverWindow category: 'MarsRover-Solucion'!
+TestCase subclass: #TestMarsRoverWindow
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-Solucion'!
+
+!TestMarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:23:57'!
+test01MarsRoverWindowShowsPositionAfterMovingForward
+	| marsRover window |
+	marsRover := MarsRover startingAt: 0@0 heading: #North.
+	window := MarsRoverWindow new.
+	marsRover addWindowForPosition: window.
+	
+	marsRover processCommands: 'f'.
+	
+	self assert: '0@1' equals: window positionText.! !
+
+!TestMarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:25:01'!
+test02MarsRoverWindowShowsPositionAfterMovingBackwards
+	| marsRover window |
+	marsRover := MarsRover startingAt: 0@0 heading: #North.
+	window := MarsRoverWindow new.
+	marsRover addWindowForPosition: window.
+	
+	marsRover processCommands: 'b'.
+	
+	self assert: '0@-1' equals: window positionText.! !
+
+!TestMarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:27:29'!
+test03MarsRoverWindowShowsHeadingAfterRotatingRight
+	| marsRover window |
+	marsRover := MarsRover startingAt: 0@0 heading: #North.
+	window := MarsRoverWindow new.
+	marsRover addWindowForHeading: window.
+	
+	marsRover processCommands: 'r'.
+	
+	self assert: 'East' equals: window headingText.! !
+
+!TestMarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:57:38'!
+test04MarsRoverWindowShowsHeadingAfterRotatingLeft
+	| marsRover window |
+	marsRover := MarsRover startingAt: 0@0 heading: #North.
+	window := MarsRoverWindow new.
+	marsRover addWindowForHeading: window.
+	
+	marsRover processCommands: 'l'.
+	
+	self assert: 'West' equals: window headingText.! !
+
+!TestMarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 21:01:34'!
+test05MarsRoverWindowShowsHeadingAndPositionAfterMovingAndRotating
+	| marsRover window |
+	marsRover := MarsRover startingAt: 0@0 heading: #North.
+	window := MarsRoverWindow new.
+	marsRover addWindowForHeading: window.
+	marsRover addWindowForPosition: window.
+	
+	marsRover processCommands: 'fl'.
+	
+	self assert: '0@1' equals: window positionText.
+	self assert: 'West' equals: window headingText.
+	! !
+
+
 !classDefinition: #MarsRover category: 'MarsRover-Solucion'!
 Object subclass: #MarsRover
-	instanceVariableNames: 'position head log logHeading logPosition'
+	instanceVariableNames: 'position head log logHeading logPosition positionWindow headingWindow'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover-Solucion'!
@@ -382,13 +448,23 @@ addHeadingLog: aMarsRoverLog
 addPositionLog: aMarsRoverLog 
 	logPosition := aMarsRoverLog! !
 
-!MarsRover methodsFor: 'reporting' stamp: 'fmonpelat 7/21/2021 19:41:19'!
-logHeadingChange
-	logHeading ifNotNil: [ logHeading changeInHeading: head ].! !
+!MarsRover methodsFor: 'reporting' stamp: 'NDS 7/21/2021 20:29:31'!
+addWindowForHeading: aMarsRoverWindow 
+	headingWindow := aMarsRoverWindow! !
 
-!MarsRover methodsFor: 'reporting' stamp: 'fmonpelat 7/21/2021 19:41:33'!
+!MarsRover methodsFor: 'reporting' stamp: 'NDS 7/21/2021 20:19:28'!
+addWindowForPosition: aMarsRoverWindow 
+	positionWindow := aMarsRoverWindow! !
+
+!MarsRover methodsFor: 'reporting' stamp: 'NDS 7/21/2021 20:30:12'!
+logHeadingChange
+	logHeading ifNotNil: [ logHeading changeInHeading: head ].
+	headingWindow ifNotNil: [ headingWindow updateHeadingTextWith: head].! !
+
+!MarsRover methodsFor: 'reporting' stamp: 'NDS 7/21/2021 20:18:45'!
 logPositionChange
-	logPosition ifNotNil: [ logPosition changeInPosition: (position asString) ].! !
+	logPosition ifNotNil: [ logPosition changeInPosition: (position asString) ].
+	positionWindow ifNotNil: [ positionWindow updatePositionTextWith: position].! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -669,3 +745,30 @@ changeInPosition: aPositionChange
 !MarsRoverLog methodsFor: 'as yet unclassified' stamp: 'fmonpelat 7/21/2021 19:48:25'!
 obtain
 	^log! !
+
+
+!classDefinition: #MarsRoverWindow category: 'MarsRover-Solucion'!
+Object subclass: #MarsRoverWindow
+	instanceVariableNames: 'positionText headingText'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover-Solucion'!
+
+!MarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:31:11'!
+headingText
+	^headingText! !
+
+!MarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:22:51'!
+positionText
+	^positionText! !
+
+!MarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:39:43'!
+updateHeadingTextWith: aHeading
+	(aHeading isKindOf: MarsRoverHeadFacingNorth ) ifTrue: [ headingText := 'North' ].
+	(aHeading isKindOf: MarsRoverHeadFacingEast ) ifTrue: [ headingText := 'East' ].
+	(aHeading isKindOf: MarsRoverHeadFacingSouth ) ifTrue: [ headingText := 'South' ].
+	(aHeading isKindOf: MarsRoverHeadFacingWest ) ifTrue: [ headingText := 'West' ].! !
+
+!MarsRoverWindow methodsFor: 'as yet unclassified' stamp: 'NDS 7/21/2021 20:23:18'!
+updatePositionTextWith: aPosition
+	positionText := aPosition asString.! !
